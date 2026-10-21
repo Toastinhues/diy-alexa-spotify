@@ -192,11 +192,14 @@ def fetch_last_track():
         return None, "Spotify login expired. Connect Spotify again."
 
     if response.status_code == 403:
-        return None, (
-            "Spotify denied access. Check your app settings, "
-            "account access and API permissions."
+        app.logger.error(
+            "Spotify 403 error body: %s",
+            response.text[:1000],
         )
-
+        return None, (
+            "Spotify denied access. Check the Render logs "
+            "for the exact error."
+        )
     if response.status_code == 429:
         return None, "Spotify rate limit reached. Please wait and retry."
 
